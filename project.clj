@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
 
                  ;; cljs libs
-                 [org.clojure/clojurescript "0.0-2277"]
+                 [org.clojure/clojurescript "0.0-2280"]
                  [org.clojure/core.async "0.1.303.0-886421-alpha"]
                  [om "0.7.0"]
                  [om-sync "0.1.1"] ;; Add's support for :tx-listen on om.core/root

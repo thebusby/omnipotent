@@ -1,5 +1,6 @@
 (ns omnipotent.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require-macros [omnipotent.macros      :refer [fn->> fn-> <- ann annv]]
+                   [cljs.core.async.macros :refer [go]])
   (:require [goog.events :as events]
             [cljs.core.async :as async :refer [put! <! chan]]
             [om.core :as om :include-macros true]
@@ -12,14 +13,21 @@
 
 (enable-console-print!)
 
-(def app-state (atom {:text "Hello world!"}))
+(def app-state (let [text "Hello world!"]
+                 (->> text
+                      (assoc {} :text text)
+                      (annv "app-state defined" [text])
+                      atom)))
+
+(def foo (let [foo ["a" "b" 3 [4 5] {:6 "7"} "8"]
+               bar "bar"]
+           (annv "test" [foo bar])))
 
 (om/root
  (fn [app owner]
    (dom/h1 nil (:text app)))
  app-state
  {:target (. js/document (getElementById "app"))})
-
 
 
 
