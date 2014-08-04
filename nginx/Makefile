@@ -1,9 +1,9 @@
 ###
-# Parameters
+# User parameters to configure
 ###
-NGINX_VERSION=1.7.3
-IN_PORT=8888
 PROXY_PASS="http://127.0.0.1:8080"
+IN_PORT=8888
+NGINX_VERSION=1.7.3
 
 # Please ignore
 .PHONY : run reload stop install clean dirs foo conf
