@@ -10,7 +10,7 @@ PROXY_PASS="http://127.0.0.1:8080"
 curdir = $(shell pwd)
 
 # Everything
-all: conf/nginx.conf dirs
+all: conf/nginx.conf dirs run
 
 # Nginx commands
 run:
