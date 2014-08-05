@@ -3,8 +3,6 @@
 
 (def ^:dynamic *cljs-debug* true)
 
-(def ^:dynamic *ann-header* "")
-
 (defmacro fn->
   "Equivalent to `(fn [x] (-> x ~@body))"
   [& body]

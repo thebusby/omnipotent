@@ -8,7 +8,7 @@
                  ;; cljs libs
                  [org.clojure/clojurescript "0.0-2280"]
                  [org.clojure/core.async "0.1.303.0-886421-alpha"]
-                 [om "0.7.0"]
+                 [om "0.7.1"]
                  [om-sync "0.1.1"] ;; Add's support for :tx-listen on om.core/root
                  [sablono "0.2.20"] ;; Enable Hiccup to work with FB's Reach
                  [shoreleave/shoreleave-browser "0.3.0"] ;; Provides access to Cookies, History, Storage, Blob fn's
