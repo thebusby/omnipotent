@@ -14,19 +14,79 @@
 (enable-console-print!)
 
 
-(def initial-state (annt "Initial state defined"
-                         {:text "Hello World"}))
+(def initial-app (annt "Initial app-state defined"
+                         {:text "Hello World"
+                          :errors ["1" "2" "3"]}))
 
+
+(defn get-new-data
+  "Fetch new data from server"
+  [app-state data-keyword]
+  (ann (str "(get-data app-state " data-keyword ") => nil, fetching")
+         (edn-xhr
+          {:method :get
+           :url (str "/" (name data-keyword) "/")
+           :on-complete
+           (fn [res]
+             (ann (str "Fetch response received for " data-keyword)
+                  (if-let [data (get-in res [:response data-keyword])]
+                    (om/update! app-state data-keyword data))))
+           :on-error
+           (fn [{:keys [error]}]
+             (annv (str "Failed fetching " data-keyword) [error] nil))})))
+
+(defn get-data
+  "Retrieve data from app-state, or fetch it from server if necassary"
+  [app-state data-keyword]
+  (if-let [data (data-keyword app-state)]
+    data
+    (get-new-data app-state data-keyword)))
+
+
+(def app-renderer
+  (fn [app owner]
+    (om/component (annv "app-renderer[]" [foon]
+                       (some->> app
+                                :text
+                                (dom/h1 nil))))))
+
+(def mise-renderer
+  (fn [app owner]
+    (om/component (ann "mise-renderer[]"
+                       (some->> (get-data app :mises)
+                                (map #(dom/li nil (:name %)))
+                                (apply dom/ul #js {:className "mises"}))))))
+
+
+(def error-renderer
+  (fn [app owner]
+    (om/component (ann "error-renderer[]"
+                       (some->> app
+                                :errors
+                                (map #(dom/li nil %))
+                                (apply dom/ul #js {:className "errors"}))))))
+
+
+
+
+
+
+
+;; Execution begins here
 (om/root
- (fn [app owner]
-   (reify om/IRender
-     (render [_]
-       (ann "om/root render[]"
-        (dom/h1 nil (:text app))))))
- initial-state
+ app-renderer
+ initial-app
  {:target (. js/document (getElementById "app"))})
 
+(om/root
+ mise-renderer
+ initial-app
+ {:target (. js/document (getElementById "mises"))})
 
+(om/root
+ error-renderer
+ initial-app
+ {:target (. js/document (getElementById "errors"))})
 
 
 
@@ -34,8 +94,13 @@
 (comment
 ;; BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- END COMMENTS --
 
+  (defn show-err-msg [app err-msg]
+    (om/transact! app :errors (fn [v]
+                                (put! v [:err-msg err-msg])
+                                v)))
+  
 
-.
+
 
 
   ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;;

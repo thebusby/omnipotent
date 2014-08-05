@@ -38,7 +38,7 @@
   "Log the execution of the provided s-exp's with title, and output the value af the sexp"
   [title sexp]
   (if *cljs-debug*
-    `(do (println (str ~title "=> " ~sexp))
+    `(do (println (str ~title "=> " (pr-str ~sexp)))
          ~sexp)
     ~sexp))
 
@@ -49,7 +49,7 @@
     (loop [vars vars, agg []]
       (if vars
         (let [v (first vars)
-              new-agg (conj agg `(str '~v "=" ~v))]
+              new-agg (conj agg `(str '~v "=" (pr-str ~v)))]
           (recur (next vars) new-agg))
         (let [details (interpose ", " agg)]
           `(do (println (str ~title "=> " ~@details))
