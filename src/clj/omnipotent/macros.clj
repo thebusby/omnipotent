@@ -34,6 +34,14 @@
          ~@sexps)
     `(do ~@sexps)))
 
+(defmacro annt
+  "Log the execution of the provided s-exp's with title, and output the value af the sexp"
+  [title sexp]
+  (if *cljs-debug*
+    `(do (println (str ~title "=> " ~sexp))
+         ~sexp)
+    ~sexp))
+
 (defmacro annv
   "Log the execution of the provided s-exp's with title, and output value of any variables provided"
   [title vars & sexps]

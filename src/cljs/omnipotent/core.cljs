@@ -1,5 +1,5 @@
 (ns omnipotent.core
-  (:require-macros [omnipotent.macros      :refer [fn->> fn-> <- ann annv]]
+  (:require-macros [omnipotent.macros      :refer [fn->> fn-> <- ann annt annv]]
                    [cljs.core.async.macros :refer [go]])
   (:require [goog.events :as events]
             [cljs.core.async :as async :refer [put! <! chan]]
@@ -13,22 +13,17 @@
 
 (enable-console-print!)
 
-(def app-state (let [text "Hello world!"]
-                 (->> text
-                      (assoc {} :text text)
-                      (annv "app-state defined" [text])
-                      atom)))
 
-(def foo (let [foo ["a" "b" 3 [4 5] {:6 "7"} "8"]
-               bar "bar"]
-           (annv "test" [foo bar])))
+(def initial-state (annt "Initial state defined"
+                         {:text "Hello World"}))
 
 (om/root
  (fn [app owner]
    (reify om/IRender
      (render [_]
-       (dom/h1 nil (:text app)))))
- app-state
+       (ann "om/root render[]"
+        (dom/h1 nil (:text app))))))
+ initial-state
  {:target (. js/document (getElementById "app"))})
 
 
@@ -40,7 +35,7 @@
 ;; BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- BEGIN COMMENTS -- END COMMENTS --
 
 
-
+.
 
 
   ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;;
