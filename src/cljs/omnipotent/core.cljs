@@ -43,9 +43,11 @@
     (get-new-data app-state data-keyword)))
 
 
+
+
 (def app-renderer
   (fn [app owner]
-    (om/component (annv "app-renderer[]" [foon]
+    (om/component (ann "app-renderer[]"
                        (some->> app
                                 :text
                                 (dom/h1 nil))))))
