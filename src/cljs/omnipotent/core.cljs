@@ -18,6 +18,18 @@
                          {:text "Hello World"
                           :errors ["1" "2" "3"]}))
 
+;; For working with Alex Gibson's Shake.js (https://github.com/alexgibson/shake.js)
+(defn setShakeHandler! [handler]
+  (.addEventListener js/window "shake" handler false))
+
+(defn stopShakeHandler! [handler]
+  (.removeEventListener js/window "shake" handler false))
+
+(defn shake-handler
+  "Run's when the user shakes the device"
+  [app-state]
+  ;; Push action via a core.async channel?
+  (om/update! app-state :shake true))
 
 (defn get-new-data
   "Fetch new data from server"
